@@ -26,7 +26,10 @@ export const categories: Category[] = [
   { id: 'business', name: 'Business', icon: '◆' },
   { id: 'marketing', name: 'Marketing', icon: '⟡' },
   { id: 'photography', name: 'Photography', icon: '◎' },
-  { id: 'music', name: 'Music', icon: '♪' }
+  { id: 'music', name: 'Music', icon: '♪' },
+  { id: 'programming', name: 'Programming', icon: '⚙️' },
+  { id: 'testing', name: 'Testing', icon: '✓' },
+  { id: 'datascience', name: 'Data Science', icon: '📊' }
 ];
 
 export const courses: Course[] = [
@@ -141,5 +144,76 @@ export const courses: Course[] = [
     featured: false,
     rating: 4.8,
     studentsCount: 1567
+  },
+  // New courses
+  {
+    id: '9',
+    title: 'Java Full Stack Training',
+    instructor: 'Robert Johnson',
+    description: 'Comprehensive training in Java, Spring Boot, Hibernate, and Angular/React for full stack development.',
+    category: 'programming',
+    level: 'Intermediate',
+    duration: '12 weeks',
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000',
+    price: 199,
+    featured: true,
+    rating: 4.9,
+    studentsCount: 3245
+  },
+  {
+    id: '10',
+    title: 'Python Full Stack Training',
+    instructor: 'Lisa Zhang',
+    description: 'Master Python, Django, Flask, and React/Vue.js to build complete web applications.',
+    category: 'programming',
+    level: 'Intermediate',
+    duration: '10 weeks',
+    image: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?q=80&w=1000',
+    price: 179,
+    featured: true,
+    rating: 4.8,
+    studentsCount: 2987
+  },
+  {
+    id: '11',
+    title: 'Data Science Training',
+    instructor: 'Marcus Peters',
+    description: 'Learn data analysis, machine learning, and visualization using Python, R, and industry tools.',
+    category: 'datascience',
+    level: 'Intermediate',
+    duration: '14 weeks',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000',
+    price: 249,
+    featured: true,
+    rating: 4.9,
+    studentsCount: 2156
+  },
+  {
+    id: '12',
+    title: 'Software Testing',
+    instructor: 'Julia Martinez',
+    description: 'Comprehensive training in manual and automated testing methodologies and tools.',
+    category: 'testing',
+    level: 'Beginner',
+    duration: '8 weeks',
+    image: 'https://images.unsplash.com/photo-1581472723648-909f4851d4ae?q=80&w=1000',
+    price: 149,
+    featured: false,
+    rating: 4.7,
+    studentsCount: 1876
+  },
+  {
+    id: '13',
+    title: 'Java Training',
+    instructor: 'Andrew Wilson',
+    description: 'Master core Java concepts, OOP principles, and enterprise Java development.',
+    category: 'programming',
+    level: 'Beginner',
+    duration: '6 weeks',
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000',
+    price: 129,
+    featured: false,
+    rating: 4.8,
+    studentsCount: 3564
   }
 ];

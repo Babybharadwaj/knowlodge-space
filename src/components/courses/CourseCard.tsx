@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Course } from '@/lib/data';
 import { cn } from '@/lib/utils';
@@ -7,12 +6,14 @@ interface CourseCardProps {
   course: Course;
   className?: string;
   featured?: boolean;
+  style?: React.CSSProperties;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ 
   course, 
   className,
-  featured = false 
+  featured = false,
+  style
 }) => {
   return (
     <div 
@@ -22,6 +23,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         featured ? 'shadow-md' : 'shadow-sm',
         className
       )}
+      style={style}
     >
       <div className="relative aspect-[16/9] w-full overflow-hidden">
         <img 

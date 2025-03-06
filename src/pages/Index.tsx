@@ -1,9 +1,9 @@
-
 import React, { useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/home/Hero';
 import FeaturedCourses from '@/components/home/FeaturedCourses';
+import Button from '@/components/ui/Button';
 
 const Index: React.FC = () => {
   // Simulate image preloading for smoother animations
