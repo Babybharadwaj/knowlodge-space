@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Button from '../ui/Button';
+import Button from '../ui/Button'; // keeping this as is since our component is actually named Button.tsx
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
