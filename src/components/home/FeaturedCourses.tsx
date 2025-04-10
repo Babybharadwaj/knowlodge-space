@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { courses } from '@/lib/data';
 import CourseCard from '../courses/CourseCard';
 import Button from '../ui/Button';
@@ -26,9 +27,11 @@ const FeaturedCourses: React.FC = () => {
           </div>
           
           <div className="mt-6 md:mt-0">
-            <Button variant="text">
-              View All Courses
-            </Button>
+            <Link to="/courses">
+              <Button variant="text">
+                View All Courses
+              </Button>
+            </Link>
           </div>
         </div>
         

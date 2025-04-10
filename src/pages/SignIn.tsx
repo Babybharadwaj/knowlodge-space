@@ -1,17 +1,18 @@
-
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import Button from '@/components/ui/Button';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Link } from 'react-router-dom';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

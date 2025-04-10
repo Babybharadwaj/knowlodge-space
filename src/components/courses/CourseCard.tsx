@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Course } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
@@ -15,15 +17,22 @@ const CourseCard: React.FC<CourseCardProps> = ({
   featured = false,
   style
 }) => {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    navigate(`/courses/${course.id}`);
+  };
+  
   return (
     <div 
       className={cn(
-        'flex flex-col overflow-hidden rounded-2xl transition-all duration-300',
-        'hover-scale glass-card',
+        'flex flex-col overflow-hidden rounded-2xl transition-all duration-300 cursor-pointer',
+        'hover:shadow-md hover-scale glass-card',
         featured ? 'shadow-md' : 'shadow-sm',
         className
       )}
       style={style}
+      onClick={handleClick}
     >
       <div className="relative aspect-[16/9] w-full overflow-hidden">
         <img 
