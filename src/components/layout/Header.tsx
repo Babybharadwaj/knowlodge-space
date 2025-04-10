@@ -1,10 +1,12 @@
 
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Button from '../ui/Button'; // keeping this as is since our component is actually named Button.tsx
+import { Link, useNavigate } from 'react-router-dom';
+import Button from '../ui/Button'; // keeping this as is
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -12,9 +14,28 @@ const Header = () => {
       setIsScrolled(scrollPosition > 10);
     };
 
+    const checkAuth = () => {
+      setIsAuthenticated(localStorage.getItem('isAuthenticated') === 'true');
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    checkAuth(); // Check on component mount
+    
+    // Listen for storage events (when another tab changes localStorage)
+    window.addEventListener('storage', checkAuth);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('storage', checkAuth);
+    };
   }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    navigate('/signin');
+  };
 
   return (
     <header
@@ -46,12 +67,20 @@ const Header = () => {
           </nav>
           
           <div className="flex items-center space-x-4">
-            <Button variant="secondary" size="sm">
-              Sign In
-            </Button>
-            <Button variant="primary" size="sm">
-              Join Now
-            </Button>
+            {isAuthenticated ? (
+              <Button onClick={handleSignOut} variant="secondary" size="sm">
+                Sign Out
+              </Button>
+            ) : (
+              <>
+                <Button onClick={() => navigate('/signin')} variant="secondary" size="sm">
+                  Sign In
+                </Button>
+                <Button onClick={() => navigate('/register')} variant="primary" size="sm">
+                  Join Now
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
