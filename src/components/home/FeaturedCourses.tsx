@@ -1,29 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
-import { courses, categories, Category } from '@/lib/data';
+import React, { useState } from 'react';
+import { courses } from '@/lib/data';
 import CourseCard from '../courses/CourseCard';
-import CategoryButton from '../courses/CategoryButton';
 import Button from '../ui/Button';
 
 const FeaturedCourses: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [filteredCourses, setFilteredCourses] = useState(courses);
   const [visibleCourses, setVisibleCourses] = useState(4);
   
-  useEffect(() => {
-    if (selectedCategory) {
-      setFilteredCourses(courses.filter(course => course.category === selectedCategory));
-    } else {
-      setFilteredCourses(courses);
-    }
-  }, [selectedCategory]);
-  
-  const handleCategoryClick = (categoryId: string) => {
-    setSelectedCategory(prev => prev === categoryId ? null : categoryId);
-  };
-  
   const handleShowMore = () => {
-    setVisibleCourses(prev => Math.min(prev + 4, filteredCourses.length));
+    setVisibleCourses(prev => Math.min(prev + 4, courses.length));
   };
   
   return (
@@ -47,22 +32,8 @@ const FeaturedCourses: React.FC = () => {
           </div>
         </div>
         
-        <div className="mb-10 overflow-x-auto pb-2 -mx-6 px-6">
-          <div className="flex space-x-3">
-            {categories.map(category => (
-              <CategoryButton
-                key={category.id}
-                category={category}
-                isActive={selectedCategory === category.id}
-                onClick={() => handleCategoryClick(category.id)}
-                className="shrink-0"
-              />
-            ))}
-          </div>
-        </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {filteredCourses.slice(0, visibleCourses).map((course, index) => (
+          {courses.slice(0, visibleCourses).map((course, index) => (
             <CourseCard 
               key={course.id} 
               course={course} 
@@ -73,7 +44,7 @@ const FeaturedCourses: React.FC = () => {
           ))}
         </div>
         
-        {visibleCourses < filteredCourses.length && (
+        {visibleCourses < courses.length && (
           <div className="mt-12 text-center">
             <Button variant="secondary" onClick={handleShowMore}>
               Show More Courses
