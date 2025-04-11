@@ -1,16 +1,17 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import Button from '@/components/ui/Button';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [role, setRole] = useState('student'); // 'student' or 'admin'
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,12 +23,23 @@ const SignIn: React.FC = () => {
     setTimeout(() => {
       setIsLoading(false);
       if (email && password) {
-        // Store auth state in localStorage (this is just for demo purposes)
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('user', JSON.stringify({ email }));
-        
-        toast.success("Successfully signed in!");
-        navigate('/');
+        if (role === 'admin') {
+          // Admin authentication
+          if (email === 'admin@example.com' && password === 'admin123') {
+            localStorage.setItem('isAdminAuthenticated', 'true');
+            toast.success("Admin sign-in successful!");
+            navigate('/admin/dashboard');
+          } else {
+            toast.error("Invalid admin credentials");
+          }
+        } else {
+          // Student/regular user authentication
+          localStorage.setItem('isAuthenticated', 'true');
+          localStorage.setItem('user', JSON.stringify({ email }));
+          
+          toast.success("Successfully signed in!");
+          navigate('/');
+        }
       } else {
         toast.error("Please enter both email and password");
       }
@@ -52,75 +64,80 @@ const SignIn: React.FC = () => {
           </div>
 
           <div className="mt-8">
-            <div className="mt-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email address
+            <Tabs defaultValue="student" onValueChange={(value) => setRole(value)} className="mb-6">
+              <TabsList className="w-full grid grid-cols-2">
+                <TabsTrigger value="student">Student</TabsTrigger>
+                <TabsTrigger value="admin">Admin</TabsTrigger>
+              </TabsList>
+            </Tabs>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email address
+                </Label>
+                <div className="mt-1">
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </Label>
+                <div className="mt-1">
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
+                  />
+                  <Label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                    Remember me
                   </Label>
-                  <div className="mt-1">
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
-                    />
-                  </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                    Password
-                  </Label>
-                  <div className="mt-1">
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="current-password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
-                    />
-                  </div>
+                <div className="text-sm">
+                  <a href="#" className="font-medium text-black hover:text-gray-800">
+                    Forgot your password?
+                  </a>
                 </div>
+              </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
-                    />
-                    <Label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                      Remember me
-                    </Label>
-                  </div>
-
-                  <div className="text-sm">
-                    <a href="#" className="font-medium text-black hover:text-gray-800">
-                      Forgot your password?
-                    </a>
-                  </div>
-                </div>
-
-                <div>
-                  <Button
-                    type="submit"
-                    disabled={isLoading}
-                    className="flex w-full justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-                  >
-                    {isLoading ? "Signing in..." : "Sign in"}
-                  </Button>
-                </div>
-              </form>
-            </div>
+              <div>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex w-full justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                >
+                  {isLoading ? "Signing in..." : `Sign in as ${role === 'admin' ? 'Admin' : 'Student'}`}
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

@@ -10,7 +10,6 @@ import CourseDetail from "./pages/CourseDetail";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
-import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/admin/Dashboard";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminProtectedRoute from "./components/auth/AdminProtectedRoute";
@@ -29,7 +28,6 @@ const App = () => (
           <Route path="/courses/:courseId" element={<CourseDetail />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
           <Route 
             path="/admin/dashboard" 
             element={

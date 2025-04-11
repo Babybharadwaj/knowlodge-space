@@ -64,9 +64,6 @@ const Header = () => {
             <Link to="/" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
               About
             </Link>
-            <Link to="/admin/login" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
-              Admin
-            </Link>
           </nav>
           
           <div className="flex items-center space-x-4">
