@@ -1,161 +1,128 @@
 
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from '@/components/ui/use-toast';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [role, setRole] = useState('student'); // 'student' or 'admin'
+  const [role, setRole] = useState('student');
   const navigate = useNavigate();
-  const location = useLocation();
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    
+    // Simple validation
+    if (!email || !password) {
+      toast({
+        title: "Error",
+        description: "Please enter both email and password.",
+        variant: "destructive"
+      });
+      return;
+    }
 
-    // This is a mock authentication - in a real app, you would verify credentials with a backend
-    setTimeout(() => {
-      setIsLoading(false);
-      if (email && password) {
-        if (role === 'admin') {
-          // Admin authentication
-          if (email === 'admin@example.com' && password === 'admin123') {
-            localStorage.setItem('isAdminAuthenticated', 'true');
-            toast.success("Admin sign-in successful!");
-            navigate('/admin/dashboard');
-          } else {
-            toast.error("Invalid admin credentials");
-          }
-        } else {
-          // Student/regular user authentication
-          localStorage.setItem('isAuthenticated', 'true');
-          localStorage.setItem('user', JSON.stringify({ email }));
-          
-          toast.success("Successfully signed in!");
-          navigate('/');
-        }
+    // Authentication logic
+    if (role === 'admin') {
+      // Admin login
+      if (email === 'admin@example.com' && password === 'admin123') {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('user', JSON.stringify({ email, role: 'admin' }));
+        toast({
+          title: "Success",
+          description: "Admin login successful!",
+          variant: "default"
+        });
+        navigate('/admin/dashboard');
       } else {
-        toast.error("Please enter both email and password");
+        toast({
+          title: "Error",
+          description: "Invalid admin credentials.",
+          variant: "destructive"
+        });
       }
-    }, 1000);
+    } else {
+      // Student login
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('user', JSON.stringify({ email, role: 'student' }));
+      toast({
+        title: "Success",
+        description: "Student login successful!",
+        variant: "default"
+      });
+      navigate('/');
+    }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div className="mb-10">
-            <Link to="/" className="text-xl font-bold tracking-tight opacity-90 hover:opacity-100 transition-opacity">
-              Knowledge<span className="text-highlight">Space</span>
-            </Link>
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Or{' '}
-              <Link to="/register" className="font-medium text-black hover:text-gray-800">
-                create a new account
-              </Link>
-            </p>
+    <div className="min-h-screen bg-white flex flex-col">
+      <Header />
+      
+      <main className="flex-grow flex items-center justify-center pt-28 pb-16">
+        <div className="max-w-md w-full px-6">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
+            <p className="text-black/70">Sign in to continue learning</p>
           </div>
-
-          <div className="mt-8">
+          
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-black/10">
             <Tabs defaultValue="student" onValueChange={(value) => setRole(value)} className="mb-6">
-              <TabsList className="w-full grid grid-cols-2">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="student">Student</TabsTrigger>
                 <TabsTrigger value="admin">Admin</TabsTrigger>
               </TabsList>
             </Tabs>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email address
-                </Label>
-                <div className="mt-1">
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
-                  />
-                </div>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm font-medium text-black/70 mb-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:outline-none transition-colors"
+                  placeholder="Enter your email"
+                />
               </div>
-
-              <div>
-                <Label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              
+              <div className="mb-6">
+                <label htmlFor="password" className="block text-sm font-medium text-black/70 mb-1">
                   Password
-                </Label>
-                <div className="mt-1">
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
-                  />
-                </div>
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:outline-none transition-colors"
+                  placeholder="Enter your password"
+                />
               </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
-                  />
-                  <Label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                    Remember me
-                  </Label>
-                </div>
-
-                <div className="text-sm">
-                  <a href="#" className="font-medium text-black hover:text-gray-800">
-                    Forgot your password?
+              
+              <Button type="submit" className="w-full">Sign In</Button>
+              
+              <div className="text-center mt-6">
+                <p className="text-sm text-black/60">
+                  Don't have an account?{' '}
+                  <a href="/register" className="text-black font-medium hover:underline">
+                    Register
                   </a>
-                </div>
-              </div>
-
-              <div>
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="flex w-full justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-                >
-                  {isLoading ? "Signing in..." : `Sign in as ${role === 'admin' ? 'Admin' : 'Student'}`}
-                </Button>
+                </p>
               </div>
             </form>
           </div>
         </div>
-      </div>
-      <div className="relative hidden w-0 flex-1 lg:block">
-        <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-black/80 to-black/50">
-          <div className="flex h-full items-center justify-center p-12">
-            <div className="max-w-xl text-white">
-              <h2 className="text-3xl font-bold mb-4">Expand your knowledge with our expert courses</h2>
-              <p className="text-xl opacity-90">Access premium educational content and learn at your own pace.</p>
-            </div>
-          </div>
-        </div>
-        <img
-          className="absolute inset-0 h-full w-full object-cover"
-          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80"
-          alt="Learning"
-        />
-      </div>
+      </main>
+      
+      <Footer />
     </div>
   );
 };

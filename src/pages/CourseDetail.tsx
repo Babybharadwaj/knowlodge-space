@@ -89,18 +89,22 @@ const CourseDetail: React.FC = () => {
               </div>
               
               <div>
-                <h2 className="text-xl font-semibold mb-4">Course Content</h2>
+                <h2 className="text-xl font-semibold mb-4">Course Modules</h2>
                 <div className="space-y-3">
-                  {/* Dummy course sections */}
-                  {Array(4).fill(0).map((_, index) => (
-                    <div key={index} className="p-4 bg-black/[0.02] rounded-lg">
-                      <h3 className="font-medium">
-                        {index === 0 ? 'Introduction to the Course' : 
-                         index === 1 ? `${course.category} Fundamentals` :
-                         index === 2 ? 'Building Projects' :
-                                     'Advanced Concepts'}
-                      </h3>
-                      <p className="text-sm text-black/60 mt-1">{index + 3} lessons • {(index + 1) * 15} min</p>
+                  {course.modules && course.modules.map((module) => (
+                    <div key={module.id} className="p-4 bg-black/[0.02] rounded-lg">
+                      <h3 className="font-medium">{module.title}</h3>
+                      <p className="text-sm text-black/60 mt-1">{module.lessons} lessons • {module.duration}</p>
+                      {module.quiz && (
+                        <div className="mt-2 flex items-center">
+                          <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-600 rounded-full">
+                            Quiz: {module.quiz.title}
+                          </span>
+                          <span className="text-xs text-black/60 ml-2">
+                            {module.quiz.questions} questions • {module.quiz.passingScore}% to pass
+                          </span>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -131,6 +135,10 @@ const CourseDetail: React.FC = () => {
                     <li className="flex text-sm">
                       <span className="mr-3">•</span>
                       <span>Downloadable resources</span>
+                    </li>
+                    <li className="flex text-sm">
+                      <span className="mr-3">•</span>
+                      <span>{course.modules?.length || 0} modules with quizzes</span>
                     </li>
                   </ul>
                 </div>
