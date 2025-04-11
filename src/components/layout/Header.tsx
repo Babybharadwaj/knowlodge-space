@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../ui/Button'; // keeping this as is
+import Button from '../ui/Button'; // keeping this import as is for compatibility
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -63,6 +63,9 @@ const Header = () => {
             </Link>
             <Link to="/" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
               About
+            </Link>
+            <Link to="/admin/login" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
+              Admin
             </Link>
           </nav>
           

@@ -32,7 +32,11 @@ const Register: React.FC = () => {
       if (name && email && password) {
         // Store auth state in localStorage (this is just for demo purposes)
         localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('user', JSON.stringify({ name, email }));
+        localStorage.setItem('user', JSON.stringify({ 
+          name, 
+          email,
+          registeredOn: new Date().toISOString().split('T')[0]
+        }));
         
         toast.success("Registration successful!");
         navigate('/');
