@@ -1,15 +1,18 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { courses } from '@/lib/data';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, Play, FileText } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
 
 const CourseDetail: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [completedModules, setCompletedModules] = useState<string[]>([]);
   
   const course = courses.find(c => c.id === courseId);
   
@@ -27,6 +30,29 @@ const CourseDetail: React.FC = () => {
       </div>
     );
   }
+
+  const handleEnroll = () => {
+    setIsEnrolled(true);
+    toast({
+      title: "Enrolled Successfully!",
+      description: "You now have access to all course modules.",
+    });
+  };
+
+  const isModuleUnlocked = (moduleIndex: number) => {
+    if (moduleIndex === 0) return true;
+    return completedModules.includes(course.modules?.[moduleIndex - 1]?.id || '');
+  };
+
+  const handleModuleComplete = (moduleId: string) => {
+    if (!completedModules.includes(moduleId)) {
+      setCompletedModules([...completedModules, moduleId]);
+      toast({
+        title: "Module Completed!",
+        description: "You can now proceed to the next module.",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -67,7 +93,6 @@ const CourseDetail: React.FC = () => {
               <div className="mb-8">
                 <h2 className="text-xl font-semibold mb-4">What You'll Learn</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {/* Dummy learning outcomes */}
                   {Array(6).fill(0).map((_, index) => (
                     <div key={index} className="flex items-start">
                       <div className="text-green-500 mr-2 mt-1">
@@ -88,34 +113,119 @@ const CourseDetail: React.FC = () => {
                 </div>
               </div>
               
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Course Modules</h2>
-                <div className="space-y-3">
-                  {course.modules && course.modules.map((module) => (
-                    <div key={module.id} className="p-4 bg-black/[0.02] rounded-lg">
-                      <h3 className="font-medium">{module.title}</h3>
-                      <p className="text-sm text-black/60 mt-1">{module.lessons} lessons • {module.duration}</p>
-                      {module.quiz && (
-                        <div className="mt-2 flex items-center">
-                          <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-600 rounded-full">
-                            Quiz: {module.quiz.title}
-                          </span>
-                          <span className="text-xs text-black/60 ml-2">
-                            {module.quiz.questions} questions • {module.quiz.passingScore}% to pass
-                          </span>
+              {isEnrolled ? (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Course Modules</h2>
+                  <div className="space-y-4">
+                    {course.modules && course.modules.map((module, index) => {
+                      const isUnlocked = isModuleUnlocked(index);
+                      const isCompleted = completedModules.includes(module.id);
+                      
+                      return (
+                        <div 
+                          key={module.id} 
+                          className={`p-6 rounded-lg border ${
+                            isUnlocked 
+                              ? 'bg-white hover:bg-gray-50 cursor-pointer' 
+                              : 'bg-gray-50 cursor-not-allowed'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3">
+                                <h3 className="font-medium">
+                                  {module.title}
+                                </h3>
+                                {isCompleted && (
+                                  <CheckCircle className="w-5 h-5 text-green-500" />
+                                )}
+                                {!isUnlocked && (
+                                  <Lock className="w-5 h-5 text-gray-400" />
+                                )}
+                              </div>
+                              
+                              <p className="text-sm text-gray-500 mt-1">
+                                {module.lessons} lessons • {module.duration}
+                              </p>
+                              
+                              {isUnlocked && (
+                                <div className="mt-4 space-y-3">
+                                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <FileText className="w-4 h-4" />
+                                    <span>Module Content</span>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <Play className="w-4 h-4" />
+                                    <span>Video Lessons</span>
+                                  </div>
+                                  {module.quiz && (
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-600 rounded-full">
+                                        Quiz: {module.quiz.questions} questions
+                                      </span>
+                                      <span className="text-xs text-black/60">
+                                        {module.quiz.passingScore}% to pass
+                                      </span>
+                                    </div>
+                                  )}
+                                  
+                                  {!isCompleted && (
+                                    <Button 
+                                      onClick={() => handleModuleComplete(module.id)}
+                                      size="sm"
+                                      className="mt-2"
+                                    >
+                                      Complete Module
+                                    </Button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  ))}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Course Modules</h2>
+                  <div className="space-y-3">
+                    {course.modules && course.modules.map((module) => (
+                      <div key={module.id} className="p-4 bg-black/[0.02] rounded-lg">
+                        <h3 className="font-medium">{module.title}</h3>
+                        <p className="text-sm text-black/60 mt-1">
+                          {module.lessons} lessons • {module.duration}
+                        </p>
+                        {module.quiz && (
+                          <div className="mt-2 flex items-center">
+                            <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-600 rounded-full">
+                              Quiz: {module.quiz.title}
+                            </span>
+                            <span className="text-xs text-black/60 ml-2">
+                              {module.quiz.questions} questions • {module.quiz.passingScore}% to pass
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="lg:col-span-1">
               <div className="sticky top-28 p-6 border border-black/10 rounded-2xl shadow-sm">
                 <div className="text-3xl font-bold mb-6">${course.price}</div>
                 
-                <Button size="lg" className="w-full mb-4">Enroll Now</Button>
+                <Button 
+                  size="lg" 
+                  className="w-full mb-4"
+                  onClick={handleEnroll}
+                  disabled={isEnrolled}
+                >
+                  {isEnrolled ? 'Enrolled' : 'Enroll Now'}
+                </Button>
                 
                 <div className="mb-6">
                   <p className="text-center text-sm text-black/60 mb-2">This course includes:</p>
