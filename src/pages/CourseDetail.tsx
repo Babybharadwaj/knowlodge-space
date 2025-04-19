@@ -54,6 +54,10 @@ const CourseDetail: React.FC = () => {
     }
   };
 
+  const handleModuleClick = (moduleId: string) => {
+    window.open(`/courses/${courseId}/modules/${moduleId}`, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -129,6 +133,7 @@ const CourseDetail: React.FC = () => {
                               ? 'bg-white hover:bg-gray-50 cursor-pointer' 
                               : 'bg-gray-50 cursor-not-allowed'
                           }`}
+                          onClick={() => isUnlocked && handleModuleClick(module.id)}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
