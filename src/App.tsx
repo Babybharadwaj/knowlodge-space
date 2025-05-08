@@ -9,6 +9,7 @@ import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import ModuleContent from "./pages/ModuleContent";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/courses/:courseId" element={<CourseDetail />} />
           <Route path="/courses/:courseId/modules/:moduleId" element={<ModuleContent />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
           <Route 

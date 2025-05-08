@@ -61,7 +61,7 @@ const Header = () => {
             <Link to="/contact" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
               Contact Us
             </Link>
-            <Link to="/" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
+            <Link to="/about" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
               About
             </Link>
           </nav>
