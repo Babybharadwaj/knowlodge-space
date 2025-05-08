@@ -58,8 +58,8 @@ const Header = () => {
             <Link to="/courses" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
               Courses
             </Link>
-            <Link to="/" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
-              Instructors
+            <Link to="/contact" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
+              Contact Us
             </Link>
             <Link to="/" className="text-sm font-medium text-black/80 hover:text-black transition-colors">
               About
