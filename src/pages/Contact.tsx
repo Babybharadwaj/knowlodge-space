@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -72,7 +75,10 @@ const Contact = () => {
       
       <main className="flex-grow pt-28 pb-16">
         <div className="max-w-3xl mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8">Contact Us</h1>
+          <h1 className="text-3xl font-bold mb-2 text-center">Contact Us</h1>
+          <p className="text-lg text-gray-600 mb-8 text-center">
+            Get in touch with us for career guidance and course information
+          </p>
           
           <div className="mb-8">
             <p className="text-lg text-gray-700 mb-4">
@@ -170,6 +176,47 @@ const Contact = () => {
                 </Button>
               </form>
             </Form>
+          </div>
+          
+          {/* Contact Information Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <Card className="shadow-md">
+              <CardContent className="flex flex-col items-center p-6 text-center">
+                <div className="mb-4 bg-red-100 p-4 rounded-full">
+                  <MapPin className="h-8 w-8 text-red-500" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
+                <p className="text-gray-600">
+                  #302, 3rd Floor, Sai Nivas Complex,<br/>
+                  Opp. Raghavendra Theatre,<br/>
+                  Vijayawada, AP - 520010
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-md">
+              <CardContent className="flex flex-col items-center p-6 text-center">
+                <div className="mb-4 bg-red-100 p-4 rounded-full">
+                  <Phone className="h-8 w-8 text-red-500" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Call Us</h3>
+                <p className="text-gray-600">
+                  +91 777 000 7631
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-md">
+              <CardContent className="flex flex-col items-center p-6 text-center">
+                <div className="mb-4 bg-red-100 p-4 rounded-full">
+                  <Mail className="h-8 w-8 text-red-500" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Email Us</h3>
+                <p className="text-gray-600">
+                  info@eduriseupskills.com
+                </p>
+              </CardContent>
+            </Card>
           </div>
           
           <div className="p-6 bg-gray-50 rounded-lg">
